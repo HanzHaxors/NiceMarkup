@@ -1,0 +1,7 @@
+html
+	head
+		title
+			text: NiceMarkup Hello World
+	body
+		h1
+			text: Hello World!
