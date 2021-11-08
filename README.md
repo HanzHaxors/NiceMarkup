@@ -12,6 +12,7 @@ html
 			text: Hello World!
 ```
 > Taken from [examples/hello.nice](examples/hello.nice)
+
 We don't have any closing tag and we use css selector to define the element
 
 ## Simple Compiler
