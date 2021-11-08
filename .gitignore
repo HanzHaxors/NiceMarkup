@@ -121,4 +121,4 @@ dist
 *~
 
 # Tmps
-bin/*
+tmps/
