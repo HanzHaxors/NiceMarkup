@@ -1,6 +1,6 @@
 {
   "name": "nicemarkup",
-  "version": "0.2.0",
+  "version": "0.2.0-rc2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/HanzHaxors/NiceMarkup/issues"
   },
-  "homepage": "https://github.com/HanzHaxors/NiceMarkup#readme"
+  "homepage": "https://github.com/HanzHaxors/NiceMarkup#readme",
+  "preferGlobal": "true",
+  "directories": {
+    "bin": "./bin"
+  }
 }
