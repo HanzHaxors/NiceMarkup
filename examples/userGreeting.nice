@@ -1,0 +1,17 @@
+html
+	head
+		title
+			text: Everything Is Nice!
+	body
+		center
+			img
+				src: https://placeimg.com/150/150/nature/sepia
+				style: margin-top: 20vh;
+			h1
+				text: Hey,
+				style: font-family: 'Arial', sans-serif;
+				id: greeting
+			p
+				text: Here, I gave you some cookies :D
+		script
+			text: document.getElementById("greeting").innerText += (new Date).getHours() > 18 ? " good night." : " good morning!";

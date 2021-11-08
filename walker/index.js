@@ -42,7 +42,7 @@ function getProperty(line) {
 
 	name = line[0];
 	line.shift();
-	value = line.join(':');
+	value = line.join(':').trim();
 
 	return {name, value};
 }
@@ -86,6 +86,8 @@ function process(source) {
 
 		/* Get Property */
 		if (isProperty(line)) {
+			tab--;
+
 			let property = getProperty(line);
 
 			if (property.name == "text") {
