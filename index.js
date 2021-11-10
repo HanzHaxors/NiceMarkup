@@ -4,6 +4,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const sass = require('sass');
 
 const walker = require('./walker');
 const utils = require('./utils');
@@ -65,7 +66,14 @@ function main() {
 			if (e.errno != -17) throw e;
 		}
 
-		fs.writeFileSync(filePath, file.content.toString());
+		if (file.type == "css") {
+			console.info(`Compiling ${file.path}...`);
+			const result = sass.renderSync({ data: file.content.toString() });
+			fs.writeFileSync(filePath, result.css.toString());
+		} else {
+			fs.writeFileSync(filePath, file.content.children[0].toString());
+		}
+
 		console.info(`${file.path} has been created`);
 	}
 }

@@ -19,5 +19,8 @@
   "preferGlobal": "true",
   "directories": {
     "bin": "./bin"
+  },
+  "dependencies": {
+    "sass": "^1.43.4"
   }
 }
