@@ -72,7 +72,8 @@ function process(source) {
 	let parentNode = undefined;
 	let lines = source.split('\n');
 
-	for (let line of lines) {
+	for (let i = 0; i < lines.length; i++) {
+		let line = lines[i];
 		/* Skips comment lines */
 		/* But first, lets check if it is pre processor */
 		if (!isPreProcessor(line) && line.replaceAll('\t', '').startsWith('#')) continue;
@@ -90,6 +91,10 @@ function process(source) {
 				case "file":
 					files.push(response);
 					parentNode = undefined;
+					break;
+				case "include":
+					/* Insert file content at next line */
+					lines = [].concat(lines.slice(0, i+1), response, lines.slice(i+1));
 					break;
 			}
 

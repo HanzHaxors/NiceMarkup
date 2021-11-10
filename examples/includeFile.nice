@@ -1,0 +1,7 @@
+#file index.html
+html
+	body
+		script
+			src: js/demo.js
+
+#include resource/includeFile_demojs.nice

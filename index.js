@@ -70,8 +70,10 @@ function main() {
 			console.info(`Compiling ${file.path}...`);
 			const result = sass.renderSync({ data: file.content.toString() });
 			fs.writeFileSync(filePath, result.css.toString());
-		} else {
+		} else if (file.type == "html") {
 			fs.writeFileSync(filePath, file.content.children[0].toString());
+		} else {
+			fs.writeFileSync(filePath, file.content.toString());
 		}
 
 		console.info(`${file.path} has been created`);
