@@ -1,0 +1,24 @@
+#file index.html
+html
+	head
+		title
+			text: Using SASS In NiceMarkup
+	body
+		h1
+			text: This header utilize Ubuntu as its font
+		p
+			text: This paragraph utilize Arial as its font
+
+#file index.css
+# Below, we could use SASS syntax and utilities
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,700;1,400&display=swap');
+body {
+	# Just for example, yknow.
+	h1 {
+		font-family: Ubuntu, sans-serif;
+	}
+
+	p {
+		font-family: Arial, sans-serif;
+	}
+}
