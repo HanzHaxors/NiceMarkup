@@ -18,13 +18,13 @@ html
 ```
 > Taken from [examples/hello.nice](examples/hello.nice)
 
-We don't have any closing tag and we use css selector to define the element
+We don't have any closing tag and we use css selector (soon WIP) to define the elements
 
 ## Usage
 ```sh
 nice <sourceFile> [destinationFolder]
 ```
-If `destinationFolder` is not defined, the destination folder name will be based from `sourceFile`.
+If `destinationFolder` is not defined, the destination folder name will be based on `sourceFile`.
 
 ## Examples
-There is so many examples in [examples](examples), you're welcome.
+There is so many examples in [examples folder](examples), you're welcome.
