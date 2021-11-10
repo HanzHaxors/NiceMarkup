@@ -1,0 +1,13 @@
+#file metatags.html
+html
+	head
+		# You can use repeatance here
+		meta
+			- charset: UTF-8
+			- name: description
+			  content: NiceMarkup language
+			- name: keywords
+			  content: HTML, CSS, JavaScript
+			- name: viewport
+			  content: width=device-width, initial-scale=1.0
+	body

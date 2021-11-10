@@ -1,0 +1,37 @@
+# Here, i will show you how to manage multiple file inside
+# one .nice file
+
+# Starts with index.html:
+#file index.html
+html
+	head
+		title
+			text: Greetings!
+		link
+			rel: stylesheet
+			href: css/index.css
+	body
+		h1
+			id: greetings
+			text: Hey,
+		script
+			src: js/index.js
+
+# The #file pre-processor indicates the compiler to write
+# additional file and put any text (except NiceMarkup comments)
+# into the file until end of file reached or another
+# #file pre-processor get in contact
+
+# You can also organize file inside additional folder,
+# like so:
+#file css/index.css
+
+# CSS file uses SCSS syntax and get compiled by their compiler
+body {
+	font-family: Arial, sans-serif;
+}
+
+#file js/index.js
+let isNight = (new Date).getHours() >= 18;
+let response = isNight ? " good night." : " good morning!";
+document.getElementById("greetings").innerText += response;

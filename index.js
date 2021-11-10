@@ -3,15 +3,15 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 
 const walker = require('./walker');
 const utils = require('./utils');
-const { print } = require('./utils');
 
 function showHelp() {
-	print(
+	console.log(
 		"USAGE:\n" +
-		"node index.js <filename>"
+		"nice <sourceFile> [destinationFolder]"
 	);
 }
 
@@ -33,18 +33,41 @@ function main() {
 	/* Confirms about the source file existence */
 	const stats = fs.statSync(source);
 	if (stats.isDirectory()) {
-		return print("Directory support will be added in the future");
+		return console.log("Directory support will be added in the future");
 	} else if (!stats.isFile()) {
-		return print("Cannot process irregular file.");
+		return console.log("Cannot process irregular file.");
 	}
 
 	if (!destination) {
-		destination = utils.getFilename(source) + ".html";
+		destination = source.replace(/\./g, '_') + "_exported";
 	}
 
+	const resolvedDestination = path.resolve(destination);
+
 	const content = fs.readFileSync(source).toString();
-	let result = walker.process(content);
-	fs.writeFileSync(destination, result);
+	let exported = walker.process(content);
+
+	try {
+		fs.mkdirSync(destination);
+	} catch (e) {
+		if (e.errno == -17) {
+			console.info("Destination directory already exists, overwriting...");
+		} else { throw e; }
+	}
+
+	for (const file of exported.files) {
+		const filePath = path.join(resolvedDestination, file.path);
+		const fileDir = path.dirname(filePath);
+
+		try {
+			fs.mkdirSync(fileDir, { recursive: true });
+		} catch (e) {
+			if (e.errno != -17) throw e;
+		}
+
+		fs.writeFileSync(filePath, file.content.toString());
+		console.info(`${file.path} has been created`);
+	}
 }
 
 main();
