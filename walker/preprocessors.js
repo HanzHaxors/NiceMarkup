@@ -34,6 +34,19 @@ function file(args) {
 	return file;
 }
 
+/*
+	Example:
+	#include products.nice
+	#include about-us.nice
+*/
+function include(args) {
+	const filePath = args.join(' ');
+	const content = fs.readFileSync(filePath);
+
+	return content.toString().split('\n');
+}
+
 module.exports = {
-	file
+	file,
+	include
 };
