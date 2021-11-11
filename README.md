@@ -1,4 +1,6 @@
 # NiceMarkup
+[![Open Source Helpers](https://www.codetriage.com/hanzhaxors/nicemarkup/badges/users.svg)](https://www.codetriage.com/hanzhaxors/nicemarkup)
+
 NiceMarkup is a simple language to help web developers build their website. As simple as it is, it has no configuration file, ever.
 
 ## Installation
