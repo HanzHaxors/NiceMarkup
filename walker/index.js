@@ -121,7 +121,9 @@ function process(source) {
 			if (lastTab < tab) {
 				parentNode = node = parentNode.children[lastTagIndex];
 			} else if (lastTab > tab) {
-				parentNode = node = parentNode.parent;
+				for (let _i = 0; _i < (lastTab - tab); _i++) {
+					parentNode = node = parentNode.parent;
+				}
 			} else if (lastTab == tab) {
 				node = parentNode;
 			} else {
