@@ -47,7 +47,7 @@ function getElementTag(line) {
 }
 
 function getProperty(line) {
-	let name = "", value = "";
+	let name = "", value = "", isMultiline = false;
 	line = deletePreTabs(line).trim();
 	line = line.split(':');
 
@@ -55,7 +55,9 @@ function getProperty(line) {
 	line.shift();
 	value = line.join(':').trim();
 
-	return {name, value};
+	if (value == '{') isMultiline = true;
+
+	return {name, value, isMultiline};
 }
 
 function process(source) {
@@ -157,7 +159,42 @@ function process(source) {
 
 			if (property.name == "text") {
 				let newNode = new Node("text");
-				newNode.attributes.value = property.value;
+
+				if (!property.isMultiline) {
+					newNode.attributes.value = property.value;
+				} else {
+					let paragraph = "";
+
+					for (let o = i + 1; o != -1; o++) {
+						let currentLine = lines[o];
+						let buf = "";
+						let escape = false;
+
+						for (const c of currentLine) {
+							if (c == '\t') continue;
+							if (c == '\\') {
+								escape = true;
+								continue;
+							}
+
+							if (c == '}' && !escape) {
+								/* We could've use labels, but no. */
+								i = o;
+								o = -2; // Breaks previous loop
+								break;  // Breaks this loop
+							}
+
+							buf += c;
+							escape = false;
+						}
+
+						paragraph += buf + '\n';
+					}
+
+					console.log(paragraph.trim());
+					newNode.attributes.value = paragraph.trim();
+				}
+
 				parentNode.children[lastTagIndex].addChild(newNode);
 			} else {
 				parentNode.children[lastTagIndex].attributes[property.name] = property.value;
