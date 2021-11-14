@@ -21,8 +21,8 @@ function isElement(line) {
 
 function isProperty(line) {
 	line = deletePreTabs(line).trim();
-	const alphregex = /[a-zA-Z]/;
-	const regex = /[a-zA-Z0-9]+:.*/;
+	const alphregex = /[a-zA-Z@]/;
+	const regex = /[a-zA-Z0-9@]+:.*/;
 
 	return line.length && alphregex.test(line[0]) && regex.test(line);
 }
@@ -191,11 +191,20 @@ function process(source) {
 						paragraph += buf + '\n';
 					}
 
-					console.log(paragraph.trim());
 					newNode.attributes.value = paragraph.trim();
 				}
 
 				parentNode.children[lastTagIndex].addChild(newNode);
+			} else if (property.name[0] == '@') {
+				let cssProp = property.name.substring(1);
+				let value = property.value;
+
+				if (parentNode.children[lastTagIndex].attributes.style == undefined) {
+					parentNode.children[lastTagIndex].attributes.style = "";
+				}
+
+				if (!value.endsWith(';')) value += ';';
+				parentNode.children[lastTagIndex].attributes.style += `${cssProp}: ${value}`;
 			} else {
 				parentNode.children[lastTagIndex].attributes[property.name] = property.value;
 			}
