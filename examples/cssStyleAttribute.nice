@@ -1,0 +1,13 @@
+#file index.html
+html
+	# lines starting with '@' are included in `style` attribute
+	# of the parent's element
+
+	# This applies black background to `html` element
+	# Pro Tip: You don't need to add ';' at the end, it is optional
+	@background: #000
+	head
+	body
+		h1
+			@color: white
+			text: I use style attribute

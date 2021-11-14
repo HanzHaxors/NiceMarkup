@@ -21,8 +21,8 @@ function isElement(line) {
 
 function isProperty(line) {
 	line = deletePreTabs(line).trim();
-	const alphregex = /[a-zA-Z]/;
-	const regex = /[a-zA-Z0-9]+:.*/;
+	const alphregex = /[a-zA-Z@]/;
+	const regex = /[a-zA-Z0-9@]+:.*/;
 
 	return line.length && alphregex.test(line[0]) && regex.test(line);
 }
@@ -47,7 +47,7 @@ function getElementTag(line) {
 }
 
 function getProperty(line) {
-	let name = "", value = "";
+	let name = "", value = "", isMultiline = false;
 	line = deletePreTabs(line).trim();
 	line = line.split(':');
 
@@ -55,7 +55,9 @@ function getProperty(line) {
 	line.shift();
 	value = line.join(':').trim();
 
-	return {name, value};
+	if (value == '{') isMultiline = true;
+
+	return {name, value, isMultiline};
 }
 
 function process(source) {
@@ -121,7 +123,9 @@ function process(source) {
 			if (lastTab < tab) {
 				parentNode = node = parentNode.children[lastTagIndex];
 			} else if (lastTab > tab) {
-				parentNode = node = parentNode.parent;
+				for (let _i = 0; _i < (lastTab - tab); _i++) {
+					parentNode = node = parentNode.parent;
+				}
 			} else if (lastTab == tab) {
 				node = parentNode;
 			} else {
@@ -155,8 +159,52 @@ function process(source) {
 
 			if (property.name == "text") {
 				let newNode = new Node("text");
-				newNode.attributes.value = property.value;
+
+				if (!property.isMultiline) {
+					newNode.attributes.value = property.value;
+				} else {
+					let paragraph = "";
+
+					for (let o = i + 1; o != -1; o++) {
+						let currentLine = lines[o];
+						let buf = "";
+						let escape = false;
+
+						for (const c of currentLine) {
+							if (c == '\t') continue;
+							if (c == '\\') {
+								escape = true;
+								continue;
+							}
+
+							if (c == '}' && !escape) {
+								/* We could've use labels, but no. */
+								i = o;
+								o = -2; // Breaks previous loop
+								break;  // Breaks this loop
+							}
+
+							buf += c;
+							escape = false;
+						}
+
+						paragraph += buf + '\n';
+					}
+
+					newNode.attributes.value = paragraph.trim();
+				}
+
 				parentNode.children[lastTagIndex].addChild(newNode);
+			} else if (property.name[0] == '@') {
+				let cssProp = property.name.substring(1);
+				let value = property.value;
+
+				if (parentNode.children[lastTagIndex].attributes.style == undefined) {
+					parentNode.children[lastTagIndex].attributes.style = "";
+				}
+
+				if (!value.endsWith(';')) value += ';';
+				parentNode.children[lastTagIndex].attributes.style += `${cssProp}: ${value}`;
 			} else {
 				parentNode.children[lastTagIndex].attributes[property.name] = property.value;
 			}

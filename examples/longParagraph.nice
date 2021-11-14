@@ -1,0 +1,27 @@
+#file index.html
+html
+	head
+		title
+			text: Long Paragraph Demo (Look The Source)
+	body
+		h1
+			text: Long Paragraph Demo
+		p
+			# Remember, NiceMarkup did not responsible for any syntax abuse
+			# Use them wisely
+			text: {
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+				sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+				Consectetur a erat nam at. Vel risus commodo viverra maecenas
+				accumsan. Penatibus et magnis dis parturient montes. Aenean et
+				tortor at risus viverra adipiscing. Curabitur gravida arcu ac tortor
+				dignissim convallis aenean et. Augue eget arcu dictum varius. Lacus
+				sed viverra tellus in hac habitasse platea dictumst vestibulum.
+				Senectus et netus et malesuada fames ac turpis egestas. Odio eu
+				feugiat pretium nibh ipsum consequat nisl vel pretium. Facilisis
+				gravida neque convallis a cras. Vitae et leo duis ut diam quam
+				nulla porttitor massa. Orci eu lobortis elementum nibh tellus molestie
+				nunc. Est velit egestas dui id ornare. Cursus sit amet dictum sit.
+			}
+		b
+			text: bruh
