@@ -10,15 +10,22 @@ html
 			text: This paragraph utilize Arial as its font
 
 #file index.css
-# Below, we could use SASS syntax and its utilities
+/* Below, we could use SASS syntax and its utilities */
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,700;1,400&display=swap');
 body {
-	# Just for example, yknow.
+	/* Just for example, yknow. */
 	h1 {
 		font-family: Ubuntu, sans-serif;
 	}
 
 	// SASS comment does works too
+	// But not with NiceMarkup comment, it is considered illegal
+
+	// Because it is being used by ID selector
+	#example {
+		style: test;
+	}
+	
 	p {
 		font-family: Arial, sans-serif;
 	}

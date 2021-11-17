@@ -78,7 +78,10 @@ function process(source) {
 		let line = lines[i];
 		/* Skips comment lines */
 		/* But first, lets check if it is pre processor */
-		if (!isPreProcessor(line) && line.replaceAll('\t', '').startsWith('#')) continue;
+		if (
+			!isPreProcessor(line) && line.replaceAll('\t', '').startsWith('#') &&
+			(files.length ? files[files.length-1].type != "css" : true)
+		) continue;
 		if (line.length == 0) continue;
 
 		/* Process pre-processor */
