@@ -7,7 +7,7 @@ NiceMarkup is a simple language to help web developers build their website. As s
 HTML, Emmet, etc. they exists! Why did you create another one?
 
 NiceMarkup is:
-<detail>
+<details>
 	<summary>
 		♻️ Easily Maintainable
 	</summary>
@@ -15,8 +15,8 @@ NiceMarkup is:
 		NiceMarkup eliminates the need of unnecessary symbols
 		and confusing one-liners
 	</p>
-</detail>
-<detail>
+</details>
+<details>
 	<summary>
 		1️⃣ One For All
 	</summary>
@@ -24,8 +24,8 @@ NiceMarkup is:
 		One file is all you need in NiceMarkup.
 		You can generate a whole website in one file without creating another.
 	</p>
-</detail>
-<detail>
+</details>
+<details>
 	<summary>
 		👨‍🎓 Not Just HTML, CSS, and JS
 	</summary>
@@ -33,7 +33,7 @@ NiceMarkup is:
 		You can code everything, using NiceMarkup. PHP, Python, C, C++, etc.
 		But, NiceMarkup only focuses on frontend languages.
 	</p>
-</detail>
+</details>
 
 
 ## Installation
