@@ -1,3 +1,5 @@
+const preprocessors = require('./preprocessors');
+
 function deletePreTabs(line) {
 	return line.substring(getTabIndex(line));
 }
@@ -65,7 +67,6 @@ module.exports = {
 	isProperty,
 	isGroupMember,
 	isPreProcessor,
-	isMultiline,
 	getTabIndex,
 	getElementTag,
 	getProperty

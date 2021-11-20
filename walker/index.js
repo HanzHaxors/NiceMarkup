@@ -7,7 +7,6 @@ const {
 	isProperty,
 	isGroupMember,
 	isPreProcessor,
-	isMultiline,
 	getTabIndex,
 	getElementTag,
 	getProperty
