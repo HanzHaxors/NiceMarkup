@@ -54,7 +54,7 @@ html
 ```
 > Taken from [examples/hello.nice](examples/hello.nice)
 
-We don't have any closing tag and we use css selector (soon WIP) to define the elements
+You don't need to write any closing tags and you could use CSS selector to define elements (see examples)
 
 ## Usage
 ```sh

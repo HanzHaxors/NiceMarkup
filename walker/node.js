@@ -13,6 +13,7 @@ class Node {
 
 		this.children = [];
 		this.parent = null;
+		this.classes = [];
 
 		this.attributes = {};
 	}
@@ -26,8 +27,12 @@ class Node {
 		let tabs = '\t'.repeat(tabAmount);
 
 		if (this.tag == "text") return `${tabs}${this.attributes.value}\n`;
+		if (this.classes.length) {
+                	this.attributes.class = this.classes.join(' ');
+                }
 
-		let result = `${tabs}<${this.tag}${assembleAttributes(this.attributes)}>\n`;
+		let result = `${tabs}<${this.tag}`;
+		result += `${assembleAttributes(this.attributes)}>\n`;
 
 		for (const child of this.children) {
 			result += child.toString(tabAmount + 1);

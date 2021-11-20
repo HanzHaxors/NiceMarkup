@@ -1,0 +1,27 @@
+#file index.html
+html
+	head
+		title
+			text: Define Element Using CSS Selector
+		link
+			rel: stylesheet
+			href: css/demo.css
+	# dot (.) is for class, you can use them repeatedly
+	# in any elements
+	body.blackbg
+		# You could also apply ID (#) and stack them with class
+		h1.whitecol#bigtitle
+			text: I'm A Big Title
+
+#file css/demo.css
+.blackbg {
+	background: black;
+}
+
+.whitecol {
+	color: white;
+}
+
+#bigtitle {
+	font-size: 64px;
+}

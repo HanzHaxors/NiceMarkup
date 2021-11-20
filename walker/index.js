@@ -15,14 +15,14 @@ function getTabIndex(line) {
 
 function isElement(line) {
 	line = deletePreTabs(line);
-	const regex = /[^a-zA-Z0-9\-]+/;
+	const regex = /[^a-z0-9\-\.\#]+/i;
 	return line.length && !regex.test(line) && !regex.test(line[0]);
 }
 
 function isProperty(line) {
 	line = deletePreTabs(line).trim();
-	const alphregex = /[a-zA-Z@]/;
-	const regex = /[a-zA-Z0-9@]+:.*/;
+	const alphregex = /[a-z@]/i;
+	const regex = /[a-z0-9@]+:.*/i;
 
 	return line.length && alphregex.test(line[0]) && regex.test(line);
 }
@@ -33,14 +33,14 @@ function isGroupMember(line) {
 }
 
 function isPreProcessor(line) {
-	let regex = /#[a-zA-Z]+/;
+	let regex = /#[a-z]+/i;
 	let action = line.substring(1).split(' ')[0];
 	return regex.test(line) && Object.keys(preprocessors).includes(action);
 }
 
 function getElementTag(line) {
 	line = deletePreTabs(line);
-	const regex = /[a-zA-Z]+[a-zA-Z0-9]*/;
+	const regex = /[a-z]+[a-z0-9\.#]*/i;
 
 	let name = regex.exec(line);
 	return name[0];
@@ -137,7 +137,19 @@ function process(source) {
 				console.log("Error");
 			}
 
-			let newNode = new Node(tag);
+			// Create new node
+			let elemRegEx = /[a-z]+[a-z0-9]*/i;
+			let elemTag = elemRegEx.exec(tag)[0];
+
+			let newNode = new Node(elemTag);
+
+			let classes = tag.match(/\.[a-z]+[a-z0-9]*/ig);
+			let elemId = tag.match(/#[a-z]+[a-z0-9]*/i);
+
+			if (classes) newNode.classes.push(...classes.map(c => c.substring(1)));
+			if (elemId) newNode.attributes.id = elemId[0].substring(1);
+
+			// Add the new node
 			lastTagIndex = node.addChild(newNode) - 1;
 			lastTag = tag;
 			groupMemberIndex = 0;
