@@ -96,6 +96,8 @@ function process(source) {
 				case "file":
 					files.push(response);
 					parentNode = undefined;
+					tab = 0;
+					lastTab = 0;
 					break;
 				case "include":
 					/* Insert file content at next line */
