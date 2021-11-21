@@ -87,6 +87,21 @@ function process(source) {
 		if (isElement(line)) {
 			let tag = getElementTag(line);
 
+			/*
+				Oh, this is the end of the previous group?
+				Delete the original first.
+			*/
+			if (groupMemberIndex > 0) {
+				let sliced = [].concat(
+					parentNode.children.slice(0, lastTagIndex - groupMemberIndex),
+					parentNode.children.slice(lastTagIndex - groupMemberIndex + 1)
+				);
+				parentNode.children = sliced;
+			}
+			/* Ok, we're done. */
+			groupMemberIndex = 0;
+
+			/* Get the new parentNode */
 			let node = undefined;
 			if (lastTab < tab) {
 				/* Get into child's scope */
@@ -134,21 +149,6 @@ function process(source) {
 			/* Add the new node */
 			lastTagIndex = node.addChild(newNode) - 1;
 			lastTag = tag;
-
-			/*
-				Oh, this is the end of the group?
-				Delete the original first.
-			*/
-			if (groupMemberIndex > 0) {
-				let sliced = [].concat(
-					parentNode.children.slice(0, lastTagIndex - groupMemberIndex),
-					parentNode.children.slice(lastTagIndex - groupMemberIndex + 1)
-				);
-				parentNode.children = sliced;
-			}
-
-			/* Ok, we're done. */
-			groupMemberIndex = 0;
 		}
 
 		/* Process group member */
