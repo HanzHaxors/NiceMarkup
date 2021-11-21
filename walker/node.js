@@ -11,16 +11,27 @@ class Node {
 	constructor(tag) {
 		this.tag = tag;
 
-		this.children = [];
 		this.parent = null;
-		this.classes = [];
+		this.children = [];
 
+		this.classes = [];
 		this.attributes = {};
 	}
 
 	addChild(node) {
 		node.parent = this;
 		return this.children.push(node);
+	}
+
+	duplicate() {
+		let newNode = new Node(this.tag);
+
+		newNode.children = [].concat(this.children);
+		newNode.parent = this.parent;
+		newNode.classes = [].concat(this.classes);
+		newNode.attributes = Object.create(this.attributes);
+
+		return newNode;
 	}
 
 	toString(tabAmount=0) {
