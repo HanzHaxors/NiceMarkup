@@ -1,5 +1,6 @@
 const Node = require('./node');
 const preprocessors = require('./preprocessors');
+const { STATES } = require('./enums');
 
 const {
 	deletePreTabs,
@@ -7,12 +8,15 @@ const {
 	isProperty,
 	isGroupMember,
 	isPreProcessor,
+	isClass,
 	getTabIndex,
 	getElementTag,
-	getProperty
+	getProperty,
+	getClassName
 } = require('./identifiers');
 
 function process(source) {
+	/* Compiler variables */
 	let	lastTab = 0,
 		tab = 0,
 		groupMemberIndex = 0,
@@ -21,10 +25,16 @@ function process(source) {
 	let files = [];
 	let parentNode = undefined;
 	let lines = source.split('\n');
+	let state = STATES.NULL;
+
+	/* Language variables */
+	let currentClassName = "";
+	let classes = {};
 
 	/* Functions */
 	function tabs() { return '\t'.repeat(tab); }
 	function getFile() { return files[files.length-1]; }
+	function getClass() { return classes[currentClassName]; }
 
 	/* Start process every line */
 	for (let i = 0; i < lines.length; i++) {
@@ -40,7 +50,9 @@ function process(source) {
 				'#' as a comment
 			*/
 			if (files.length && getFile().type != "css") continue;
-		} else if (line.length == 0) continue;
+		} else if (line.trim().length == 0) {
+			continue;
+		}
 
 		/* Process pre-processor */
 		if (isPreProcessor(line)) {
@@ -56,6 +68,7 @@ function process(source) {
 					parentNode = undefined;
 					tab = 0;
 					lastTab = 0;
+					state = STATES.NULL;
 					break;
 				case "include":
 					/* Insert file content at next line */
@@ -83,9 +96,25 @@ function process(source) {
 			parentNode = file.content;
 		}
 
+		/* These are all HTML algorithm now */
+		/* Class definition */
+		if (isClass(line) && getFile().content.children.length == 0) {
+			currentClassName = getClassName(line);
+			let newNode = new Node(currentClassName);
+
+			classes[currentClassName] = newNode;
+
+			parentNode = newNode;
+			state = STATES.DEFINE_CLASS;
+
+			continue;
+		}
+
 		/* Get element tag */
 		if (isElement(line)) {
 			let tag = getElementTag(line);
+			let elemRegEx = /[a-z]+[a-z0-9]*/i;
+			let elemTag = elemRegEx.exec(tag)[0];
 
 			/*
 				Oh, this is the end of the previous group?
@@ -104,12 +133,16 @@ function process(source) {
 			/* Get the new parentNode */
 			let node = undefined;
 			if (lastTab < tab) {
-				/* Get into child's scope */
-				parentNode = node = parentNode.children[lastTagIndex];
+				if (parentNode.children.length) {
+					/* Get into child's scope */
+					node = parentNode = parentNode.children[lastTagIndex];
+				} else {
+					node = parentNode;
+				}
 			} else if (lastTab > tab) {
 				/* Start searching for parentNode after leaving child's scope */
 				for (let _i = 0; _i < (lastTab - tab); _i++) {
-					parentNode = node = parentNode.parent;
+					node = parentNode = parentNode.parent;
 				}
 			} else if (lastTab == tab) {
 				/* Default */
@@ -122,19 +155,26 @@ function process(source) {
 				console.log("Error");
 			}
 
-			/* Create new node */
-			let elemRegEx = /[a-z]+[a-z0-9]*/i;
-			let elemTag = elemRegEx.exec(tag)[0];
+			if (!node) {
+				node = parentNode = getFile().content;
+			}
 
-			let newNode = new Node(elemTag);
+			/* Create new node */
+			let newNode = undefined;
+			// Change the node when it is a class
+			if (classes[elemTag] != undefined) {
+				newNode = classes[elemTag].duplicate();
+			} else {
+				newNode = new Node(elemTag)
+			}
 
 			/* Get the node class and id */
-			let classes = tag.match(/\.[a-z]+[a-z0-9]*/ig);
+			let elemClasses = tag.match(/\.[a-z]+[a-z0-9]*/ig);
 			let elemId = tag.match(/#[a-z]+[a-z0-9]*/i);
 
 			/* Put them into the newNode if any */
-			if (classes) {
-				newNode.classes.push(...classes.map(
+			if (elemClasses) {
+				newNode.classes.push(...elemClasses.map(
 					/* Remove the dot (.) prefix */
 					c => c.substring(1)
 				));
@@ -146,9 +186,17 @@ function process(source) {
 				.substring(1);
 			}
 
+			/* Get the node multiplier value */
+			let elemMultiplier = tag.match(/\*[0-9]+/);
+			if (elemMultiplier == null) elemMultiplier = ["*1"];
+			elemMultiplier = parseInt(elemMultiplier[0].substring(1));
+
 			/* Add the new node */
-			lastTagIndex = node.addChild(newNode) - 1;
-			lastTag = tag;
+			for (let i = 0; i < elemMultiplier; i++) {
+				lastTagIndex = node.addChild(newNode) - 1;
+			}
+
+			lastTag = elemTag;
 		}
 
 		/* Process group member */
