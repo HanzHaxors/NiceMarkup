@@ -1,0 +1,16 @@
+#file index.html
+class box
+	b
+		text: title
+	p
+		text: description
+
+html
+	body
+		ul
+			# Just multiply the element using the star (*) symbol
+			li*3
+				text: Hey!
+
+		# Works with classes too
+		box*4

@@ -26,7 +26,10 @@ class Node {
 	duplicate() {
 		let newNode = new Node(this.tag);
 
-		newNode.children = [].concat(this.children);
+		newNode.children = this.children.map(child => {
+			return child.duplicate();
+		});
+
 		newNode.parent = this.parent;
 		newNode.classes = [].concat(this.classes);
 		newNode.attributes = Object.create(this.attributes);

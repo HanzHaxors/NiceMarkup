@@ -7,7 +7,7 @@ function deletePreTabs(line) {
 /* Is */
 function isElement(line) {
 	line = deletePreTabs(line);
-	const regex = /[^a-z0-9\-\.\#]+/i;
+	const regex = /[^a-z0-9\-\.\#\*]+/i;
 	return line.length && !regex.test(line) && !regex.test(line[0]);
 }
 
@@ -30,6 +30,11 @@ function isPreProcessor(line) {
 	return regex.test(line) && Object.keys(preprocessors).includes(action);
 }
 
+function isClass(line) {
+	line = deletePreTabs(line);
+	return line.startsWith('class');
+}
+
 /* Gets */
 function getTabIndex(line) {
 	let i = 0;
@@ -41,7 +46,7 @@ function getTabIndex(line) {
 
 function getElementTag(line) {
 	line = deletePreTabs(line);
-	const regex = /[a-z]+[a-z0-9\.#]*/i;
+	const regex = /[a-z]+[a-z0-9\.\#\*\-]*/i;
 
 	let name = regex.exec(line);
 	return name[0];
@@ -61,13 +66,21 @@ function getProperty(line) {
 	return {name, value, isMultiline};
 }
 
+function getClassName(line) {
+	line = deletePreTabs(line);
+
+	return line.split(/\s+/)[1].trim();
+}
+
 module.exports = {
 	deletePreTabs,
 	isElement,
 	isProperty,
 	isGroupMember,
 	isPreProcessor,
+	isClass,
 	getTabIndex,
 	getElementTag,
-	getProperty
+	getProperty,
+	getClassName
 };

@@ -71,7 +71,15 @@ function main() {
 			const result = sass.renderSync({ data: file.content.toString() });
 			fs.writeFileSync(filePath, result.css.toString());
 		} else if (file.type == "html") {
-			fs.writeFileSync(filePath, file.content.children[0].toString());
+			let htmlNode = undefined;
+			for (const node of file.content.children) {
+				/* Root Node, in search of HTML Node */
+				if (node.tag == "html") {
+					htmlNode = node;
+					break;
+				}
+			}
+			fs.writeFileSync(filePath, htmlNode.toString());
 		} else {
 			fs.writeFileSync(filePath, file.content.toString());
 		}

@@ -1,0 +1,16 @@
+#file index.html
+class TitleAndDescription
+	h1
+		text: I'm a title
+	p
+		text: I'm a description, we are both beautiful!
+
+html
+	body
+		TitleAndDescription
+
+		# Want to add a custom node as the child?
+		# Easy!
+		TitleAndDescription
+			b
+				text: I'm a bold custom text
