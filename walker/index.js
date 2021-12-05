@@ -43,7 +43,7 @@ function process(source) {
 		/* But first, lets check if it is pre processor */
 		if (isPreProcessor(line)) {
 			// Nothing
-		} else if (line.replaceAll('\t', '').startsWith('#')) {
+		} else if (line.replace(/\t/g, '').startsWith('#')) {
 			/*
 				Check if we are in a CSS file.
 				Because in CSS, we can't use
@@ -103,17 +103,16 @@ function process(source) {
 			let newNode = new Node(currentClassName);
 
 			classes[currentClassName] = newNode;
+			file.content.addChild(newNode);
 
-			parentNode = newNode;
 			state = STATES.DEFINE_CLASS;
-
 			continue;
 		}
 
 		/* Get element tag */
 		if (isElement(line)) {
 			let tag = getElementTag(line);
-			let elemRegEx = /[a-z]+[a-z0-9]*/i;
+			let elemRegEx = /[a-z]+[a-z0-9\-]*/i;
 			let elemTag = elemRegEx.exec(tag)[0];
 
 			/*
@@ -133,12 +132,8 @@ function process(source) {
 			/* Get the new parentNode */
 			let node = undefined;
 			if (lastTab < tab) {
-				if (parentNode.children.length) {
-					/* Get into child's scope */
-					node = parentNode = parentNode.children[lastTagIndex];
-				} else {
-					node = parentNode;
-				}
+				/* Get into child's scope */
+				node = parentNode = parentNode.children[lastTagIndex];
 			} else if (lastTab > tab) {
 				/* Start searching for parentNode after leaving child's scope */
 				for (let _i = 0; _i < (lastTab - tab); _i++) {

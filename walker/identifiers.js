@@ -46,7 +46,7 @@ function getTabIndex(line) {
 
 function getElementTag(line) {
 	line = deletePreTabs(line);
-	const regex = /[a-z]+[a-z0-9\.\#\*]*/i;
+	const regex = /[a-z]+[a-z0-9\.\#\*\-]*/i;
 
 	let name = regex.exec(line);
 	return name[0];
