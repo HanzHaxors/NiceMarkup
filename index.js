@@ -7,6 +7,7 @@ const path = require('path');
 const sass = require('sass');
 
 const walker = require('./walker');
+const Node = require('./walker/node');
 const utils = require('./utils');
 
 function showHelp() {
@@ -71,7 +72,7 @@ function main() {
 			const result = sass.renderSync({ data: file.content.toString() });
 			fs.writeFileSync(filePath, result.css.toString());
 		} else if (file.type == "html") {
-			let htmlNode = undefined;
+			let htmlNode = new Node('html');
 			for (const node of file.content.children) {
 				/* Root Node, in search of HTML Node */
 				if (node.tag == "html") {
