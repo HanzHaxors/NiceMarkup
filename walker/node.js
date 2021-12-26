@@ -1,3 +1,5 @@
+const noNewLine = ['input', 'span', 'b', 'i', 'textarea', 'img', 'link'];
+
 function assembleAttributes(attrs) {
 	let result = " ";
 	for (const attr in attrs) {
@@ -46,13 +48,17 @@ class Node {
                 }
 
 		let result = `${tabs}<${this.tag}`;
-		result += `${assembleAttributes(this.attributes)}>\n`;
+		result += `${assembleAttributes(this.attributes)}>`;
+
+		if (this.children.length > 0) result += '\n';
 
 		for (const child of this.children) {
 			result += child.toString(tabAmount + 1);
 		}
 
-		result += `${tabs}</${this.tag}>\n`;
+		if (!noNewLine.includes(this.tag)) result += tabs;
+
+		result += `</${this.tag}>\n`;
 		return result;
 	}
 }
