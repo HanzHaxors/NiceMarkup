@@ -10,6 +10,8 @@ const walker = require('./walker');
 const Node = require('./walker/node');
 const utils = require('./utils');
 
+const package = require('./package.json');
+
 function showHelp() {
 	console.log(
 		"USAGE:\n" +
@@ -24,6 +26,9 @@ function main() {
 	 * So just remove them.
 	 */
 	const argv = process.argv.slice(2);
+
+	// Show introduction
+	console.log(`NiceMarkup v${package.version}\n`);
 
 	if (argv.length == 0) {
 		return showHelp();
