@@ -164,8 +164,8 @@ function process(source) {
 			}
 
 			/* Get the node class and id */
-			let elemClasses = tag.match(/\.[a-z]+[a-z0-9]*/ig);
-			let elemId = tag.match(/#[a-z]+[a-z0-9]*/i);
+			let elemClasses = tag.match(/\.[a-z]+[a-z0-9\-]*/ig);
+			let elemId = tag.match(/#[a-z]+[a-z0-9\-]*/i);
 
 			/* Put them into the newNode if any */
 			if (elemClasses) {
